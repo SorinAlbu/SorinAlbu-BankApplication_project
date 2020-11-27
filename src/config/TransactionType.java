@@ -1,0 +1,8 @@
+package config;
+
+public enum TransactionType {
+    TRANSFER_BETWEEN_ACCOUNTS,
+    TRANSFER_DEBIT_ACCOUNT_IBAN,
+    TOP_UP_CREDIT_ACCOUNT_ID,
+    WITHDRAW_FROM_DEBIT_ACCOUNT
+}

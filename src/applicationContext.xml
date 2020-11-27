@@ -1,0 +1,113 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+   http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+   http://www.springframework.org/schema/context
+   https://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:property-placeholder location="classpath:project.properties"/>
+
+    <bean id="admin"
+          class="users.Administrator"
+          scope="prototype">
+        <property name="username" value="${admin.username}" />
+        <property name="password" value="${admin.password}" />
+    </bean>
+
+    <bean id="person"
+          class="users.Person"
+          scope="prototype">
+        <constructor-arg value="${person.username}" />
+        <constructor-arg value="${person.password}" />
+    </bean>
+
+    <bean id="legalPerson"
+          class="users.LegalPerson"
+          scope="prototype">
+        <constructor-arg value="${legalPerson.username}" />
+        <constructor-arg value="${legalPerson.password}" />
+    </bean>
+
+    <!--Controllers and Services-->
+    <bean id="loginController"
+          class="controllers.LoginController">
+        <constructor-arg ref="loginService"/>
+    </bean>
+
+    <bean id="loginService"
+          class="services.LoginService">
+        <constructor-arg ref="clientDB"/>
+        <constructor-arg ref="adminDB"/>
+        <constructor-arg ref="appMessage"/>
+    </bean>
+
+    <bean id="adminController"
+          class="controllers.AdminController">
+        <constructor-arg ref="adminService"/>
+        <constructor-arg ref="appMessage" />
+    </bean>
+
+    <bean id="adminService"
+          class="services.AdminService">
+        <constructor-arg ref="clientDB"/>
+        <constructor-arg ref="appMessage"/>
+    </bean>
+
+    <bean id="clientController"
+          class="controllers.ClientController">
+        <constructor-arg ref="clientService"/>
+        <constructor-arg ref="appMessage"/>
+    </bean>
+
+    <bean id="clientService"
+          class="services.ClientService">
+        <constructor-arg ref="accountService" />
+        <constructor-arg ref="appMessage" />
+    </bean>
+
+    <bean id="accountService"
+          class="services.AccountService">
+        <constructor-arg ref="transactionDB" />
+    </bean>
+
+    <!--Repos-->
+    <bean id="clientDB"
+          class="repos.ClientCache">
+        <property name="clientMap">
+            <map>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="adminDB"
+          class="repos.AdminCache">
+        <property name="adminList">
+            <list>
+                <ref bean="admin" />
+            </list>
+        </property>
+    </bean>
+
+    <bean id="transactionDB"
+          class="repos.TransactionCache">
+    </bean>
+    <!--Repos-->
+
+    <!--Additional-->
+    <bean id="appMessage"
+          class="config.AppMessage">
+        <property name="SUCCESS_MSG" value="${app.SUCCESS_MSG}" />
+        <property name="USER_FAILED_MSG" value="${app.USER_FAILED_MSG}" />
+        <property name="DUPLICATE_USER_MSG" value="${app.DUPLICATE_USER_MSG}" />
+        <property name="INCORRECT_TYPE_MSG" value="${app.INCORRECT_TYPE_MSG}" />
+        <property name="INCORRECT_IBAN" value="${app.INCORRECT_IBAN}" />
+        <property name="INCORRECT_ID" value="${app.INCORRECT_ID}" />
+        <property name="INSUFFICIENT_FUNDS" value="${app.INSUFFICIENT_FUNDS}" />
+        <property name="NO_ACCOUNT_FOUND" value="${app.NO_ACCOUNT_FOUND}" />
+        <property name="REPORT_MSG" value="${app.REPORT_MSG}" />
+    </bean>
+
+</beans>
